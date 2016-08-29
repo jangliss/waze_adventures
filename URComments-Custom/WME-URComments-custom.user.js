@@ -4,7 +4,7 @@
 // @namespace      RickZabel@gmail.com
 // @grant          none
 // @grant          GM_info
-// @version        0.0.1
+// @version        0.0.2
 // @match          https://editor-beta.waze.com/*editor/*
 // @match          https://beta.waze.com/*editor/*
 // @match          https://www.waze.com/*editor/*
@@ -492,7 +492,11 @@ window.UrcommentsCustomArray2 = [
     
     "Valid Speed Limit",
     "Volunteer Responding - We have investigated the speed limit at the location you have reported and found it to be correct. As you travel, please feel welcome to report any map issues you encounter. Thanks!",
-    "NotIdentified"
+    "NotIdentified",
+	
+	"Duplicate Report",
+	"Volunteer Responding - Closing this issue.  Duplicate issue at same location. Thanks!",
+	"NotIdentified"
 
 ];
 //end Custom list

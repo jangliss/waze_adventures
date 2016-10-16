@@ -163,7 +163,7 @@ window.UrcommentsCustomURC_Text[36] = "All comments - double click link (auto se
 window.UrcommentsCustomURC_Text_tooltip[36] = "Add an extra link to each comment in the list that when double clicked will auto send the comment to the UR windows and click send, and then will launch all of the other options that are enabled";
 
 window.UrcommentsCustomURC_Text[37] = "Comment List";
-window.UrcommentsCustomURC_Text_tooltip[37] = "This shows the selected comment list. There is support for a custom list. If you would like your comment list built into this script or have suggestions on the Comments team’s list, please contact me at rickzabel @waze or @gmail";
+window.UrcommentsCustomURC_Text_tooltip[37] = "This shows the selected comment list. There is support for a custom list. If you would like your comment list built into this script or have suggestions on the Comments team's list, please contact me at rickzabel @waze or @gmail";
 
 window.UrcommentsCustomURC_Text[38] = "Disable done / next buttons";
 window.UrcommentsCustomURC_Text_tooltip[38] = "Disable the done / next buttons at the bottom of the new UR window";
@@ -265,15 +265,15 @@ window.UrcommentsCustomArray2 = [
 	"NotIdentified",
 
 	"Valid Left turns",
-	"Volunteer responding - If you wait and complete the left turn, it may actually be faster than the alternative. If it’s not faster, your wait time will contribute to Waze’s database, thus helping to discourage the routing server from suggesting left turns at that intersection. We also suggest if you do not feel comfortable making such left turns, you can always go another route and let Waze recalculate.", //karlcr9911 4/4/15 //rickzabel 4/5/15
+	"Volunteer responding - If you wait and complete the left turn, it may actually be faster than the alternative. If it's not faster, your wait time will contribute to Waze's database, thus helping to discourage the routing server from suggesting left turns at that intersection. We also suggest if you do not feel comfortable making such left turns, you can always go another route and let Waze recalculate.", //karlcr9911 4/4/15 //rickzabel 4/5/15
 	"NotIdentified",
 
 	"Valid Left turns 2",
-	"Volunteer responding – We cannot disable legal turns only because they are difficult. If you wait and complete the left turn, it may actually be faster than the alternative. If it’s not faster, your wait time will contribute to Waze’s database, thus helping to discourage the routing server from suggesting left turns at that intersection. We also suggest if you do not feel comfortable making such left turns, you can always go another route and let Waze recalculate.", //karlcr9911 4/4/15 //rickzabel 4/5/15
+	"Volunteer responding – We cannot disable legal turns only because they are difficult. If you wait and complete the left turn, it may actually be faster than the alternative. If it's not faster, your wait time will contribute to Waze's database, thus helping to discourage the routing server from suggesting left turns at that intersection. We also suggest if you do not feel comfortable making such left turns, you can always go another route and let Waze recalculate.", //karlcr9911 4/4/15 //rickzabel 4/5/15
 	"NotIdentified",
 
 	"Valid but Difficult Route",
-	"Volunteer responding – We cannot disable legal routes only because they are difficult. If you wait and complete the route, it may actually be faster than the alternative. If it’s not faster, your wait time will contribute to Waze’s database, thus helping to discourage the routing server from suggesting the route. We also suggest if you do not feel comfortable, you can always go another route and let Waze recalculate.", //karlcr9911 4/4/15 //rickzabel 4/5/15
+	"Volunteer responding – We cannot disable legal routes only because they are difficult. If you wait and complete the route, it may actually be faster than the alternative. If it's not faster, your wait time will contribute to Waze's database, thus helping to discourage the routing server from suggesting the route. We also suggest if you do not feel comfortable, you can always go another route and let Waze recalculate.", //karlcr9911 4/4/15 //rickzabel 4/5/15
 	"NotIdentified",
 
 	"Missing place",
@@ -322,7 +322,7 @@ window.UrcommentsCustomArray2 = [
 	"NotIdentified",
 
 	"Signal Avoidance Bug",
-	"There are no issues with the intersection’s turn restrictions. Waze's developers are working on a fix for this issue. We do not have an ETA. Please feel free to use the turn until the issue is resolved. Thanks!", //GizmoGuy, t0cableguy, rickzabel 1/14/2015
+	"There are no issues with the intersection's turn restrictions. Waze's developers are working on a fix for this issue. We do not have an ETA. Please feel free to use the turn until the issue is resolved. Thanks!", //GizmoGuy, t0cableguy, rickzabel 1/14/2015
 	"NotIdentified",
 
 	"Already included restrictions",

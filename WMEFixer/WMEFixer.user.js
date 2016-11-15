@@ -1,11 +1,12 @@
 // ==UserScript==
 // @name         WMEFixer
 // @namespace    http://tampermonkey.net/
-// @version      0.0.1
+// @version      0.0.2
 // @description  try to take over the world!
 // @author       jangliss (h/t to dummyd2)
-// @match        https://*.waze.com/*editor*
-// @match		 https://editor-beta.waze.com/*
+// @match        https://*.waze.com/*editor/*
+// @match		 https://beta.waze.com/*editor/*
+// @exclude      https://www.waze.com/*user/editor/*
 // @grant        none
 // ==/UserScript==
 

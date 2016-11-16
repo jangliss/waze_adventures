@@ -4,9 +4,7 @@ A small script adapted from dummyd2's code to fix WME's latest code breakage.
 
 ## Installation
 
-- Click on the script name
-- Push the raw button, this should trigger TamperMonkey
-- Install the script
+- [Install the script](WMEFixer.user.js?raw=1)
 - Go to TamperMonkey dashboard
 - Find WMEFixer and click
 - Go to the settings tab

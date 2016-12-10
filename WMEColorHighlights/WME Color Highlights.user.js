@@ -2,19 +2,17 @@
 // @name                WME Color Highlights
 // @namespace           http://userscripts.org/users/419370
 // @description         Adds colours to road segments to show their status
-// @include             https://*.waze.com/editor/*
-// @include             https://*.waze.com/*/editor/*
-// @exclude             https://*.waze.com/user/editor/*
-// @exclude             https://*.waze.com/*/user/editor/*
-// @version             2.20
+// @match				https://*.waze.com/*editor/*
+// @exclude             https://*.waze.com/*user/editor/*
+// @version             2.21
 // @grant               none
 // ==/UserScript==
-
+//debugger;
 (function()
 {
 
 // global variables
-var wmech_version = "2.20"
+var wmech_version = "2.21"
 
 var advancedMode = false;
 var lastModified = false;
@@ -42,6 +40,7 @@ function highlightSegments(event) {
   var specificRoadType = getId('_cbHighlightRoadType').checked;
   var showNoTerm = getId('_cbHighlightNoTerm').checked;
   var showRoutingPref = getId('_cbHighlightRoutingPref').checked;
+  var showNoHNs = getId('_cbHighlightNoHN').checked;
   
   var showRecent = advancedMode ? getId('_cbHighlightRecent').checked : false;
   var specificEditor = getId('_cbHighlightEditor').checked;
@@ -165,6 +164,7 @@ function highlightSegments(event) {
     var hasRestrictions = (attributes.fwdRestrictions.length + attributes.revRestrictions.length > 0);
     var updatedBy   = attributes.updatedBy;
     var roundabout  = attributes.junctionID !== null;
+	var hasHouseNumbers = attributes.hasHNs;
     
     // get current state of the line
     var lineColor = line.getAttribute("stroke");
@@ -334,6 +334,12 @@ function highlightSegments(event) {
       newOpacity = 0.5;
       newWidth = 6;
     }
+	
+	else if (!hasHouseNumbers && showNoHNs && attributes.roadType < 8 && attributes.roadType != 5 && attributes.roadType != 4) {
+		newColor = "#800000";
+		newOpacity = 0.5;
+		newDashes = "10 10";
+	}
 
       
     // highlight segments by selected user, unless already highlighted
@@ -1194,6 +1200,8 @@ function initialiseHighlights()
                      + '<input type="checkbox" id="_cbHighlightNoTerm" /> '
                      + '<span title="*Dead-end roads should have terminating nodes on the end, or Waze cannot route to or from them.">Unterminated Roads* (Lime)</span><br>'
                      + '<input type="checkbox" id="_cbHighlightCity" /> '
+					 + '<span title="Dashed = Has no house numbers."> No house numbers (Maroon)</span><br />'
+					 + '  <input type="checkbox" id="_cbHighlightNoHN" /> Missing House Numbers (Maroon)<br />'
                      + 'Filter by City (Yellow) &nbsp;'
                      + '  <input type="checkbox" id="_cbHighlightCityInvert" /> invert <br> '
                      + '  <select id="_selectCity" name="_selectCity" style="margin: 0 0 4px 16px"></select>'
@@ -1271,7 +1279,7 @@ function initialiseHighlights()
   getId('_cbHighlightPlusStreetLimits').onclick = highlightSegments;
   getId('_cbHighlightAvgSpeedCams').onclick = highlightSegments;
   getId('_cbHighlightRoutingPref').onclick = highlightSegments;
-
+  getId('_cbHighlightNoHN').onclick = highlightSegments;
   getId('_cbHighlightRecent').onclick = highlightSegmentsAndPlaces;
   getId('_cbHighlightEditor').onclick = highlightSegmentsAndPlaces;
   getId('_cbHighlightCity').onclick = highlightSegmentsAndPlaces;
@@ -1318,6 +1326,7 @@ function initialiseHighlights()
     getId('_cbHighlightPlusRampLimits').checked  = options[26];
     getId('_cbHighlightPlusStreetLimits').checked  = options[24];
     getId('_cbHighlightAvgSpeedCams').checked  = options[27];
+	getId('_cbHighlightNoHN').checked = options[28];
     
   if (options[12] === undefined) options[12] = 7;
     getId('_cbHighlightRecent').checked   = options[11];
@@ -1325,6 +1334,7 @@ function initialiseHighlights()
     getId('_cbHighlightEditor').checked   = options[13];
     getId('_cbHighlightTurns').checked    = options[18];
     getId('_cbHighlightRoutingPref').checked  = options[25];
+	getId('_cbHighlightNoHN').checked = options[28];
   } else {
     getId('_cbHighlightPlaces').checked = true;
     getId('_cbHighlightTurns').checked    = true;
@@ -1369,6 +1379,7 @@ function initialiseHighlights()
       options[24] = getId('_cbHighlightPlusStreetLimits').checked;
       options[26] = getId('_cbHighlightPlusRampLimits').checked;
       options[27] = getId('_cbHighlightAvgSpeedCams').checked;
+	  options[28] = getId('_cbHighlightNoHN').checked;
      
       if (advancedMode) {
         options[11] = getId('_cbHighlightRecent').checked;

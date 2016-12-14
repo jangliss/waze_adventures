@@ -1,13 +1,13 @@
 // ==UserScript==
 // @name                WME Color Highlights
-// @namespace           http://userscripts.org/users/419370
+// @namespace           https://greasyfork.org/scripts/3206-wme-color-highlights/code/WME%20Color%20Highlights.user.js
 // @description         Adds colours to road segments to show their status
 // @match				https://*.waze.com/*editor/*
 // @exclude             https://*.waze.com/*user/editor/*
-// @version             2.21
+// @version             2.22
 // @grant               none
 // ==/UserScript==
-//debugger;
+
 (function()
 {
 
@@ -50,7 +50,7 @@ function highlightSegments(event) {
   if (event && event.type && event.type == 'click') {
     if ( (showLocked | showToll | showNoCity | showNoName | showAltName | showOneWay | showNoDirection | showRestrictions
      | specificCity | specificEditor | specificRoadType | showNoTerm | showRecent | showSpeedLimits | showAvgSpeedCams
-     | showNoHNs | showUnPaved ) == false) {
+	 | showNoHNs | showUnPaved ) == false) {
       for (var seg in Waze.model.segments.objects) {
         var segment = Waze.model.segments.get(seg);
         var line = getId(segment.geometry.id);

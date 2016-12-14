@@ -1,13 +1,13 @@
 // ==UserScript==
 // @name                WME Color Highlights
-// @namespace           http://userscripts.org/users/419370
+// @namespace           https://greasyfork.org/scripts/3206-wme-color-highlights/code/WME%20Color%20Highlights.user.js
 // @description         Adds colours to road segments to show their status
-// @match				https://*.waze.com/*editor/*
+// @match		https://*.waze.com/*editor/*
 // @exclude             https://*.waze.com/*user/editor/*
-// @version             2.21
+// @version             2.22
 // @grant               none
 // ==/UserScript==
-//debugger;
+
 (function()
 {
 
@@ -41,6 +41,7 @@ function highlightSegments(event) {
   var showNoTerm = getId('_cbHighlightNoTerm').checked;
   var showRoutingPref = getId('_cbHighlightRoutingPref').checked;
   var showNoHNs = getId('_cbHighlightNoHN').checked;
+  var showUnPaved = getId('_cbHighlightUnpaved').checked;
   
   var showRecent = advancedMode ? getId('_cbHighlightRecent').checked : false;
   var specificEditor = getId('_cbHighlightEditor').checked;
@@ -335,10 +336,18 @@ function highlightSegments(event) {
       newWidth = 6;
     }
 	
+	// highlight roads with no house numbers
 	else if (!hasHouseNumbers && showNoHNs && attributes.roadType < 8 && attributes.roadType != 5 && attributes.roadType != 4) {
 		newColor = "#800000";
 		newOpacity = 0.5;
 		newDashes = "10 10";
+	}
+	
+	// highlight roads that are marked as unpaved
+	else if (showUnPaved && segment.flagAttributes !== null && segment.flagAttributes.unpaved) {
+		newColor = "#909";
+		newOpacity = 0.5;
+		newWidth = 4;
 	}
 
       
@@ -1193,13 +1202,14 @@ function initialiseHighlights()
                      + 'No City (Gray)<br>'
                      + '<input type="checkbox" id="_cbHighlightOneWay" /> '
                      + 'One Way (Blue)<br>'
+					 + '<input type="checkbox" id="_cbHighlightNoHN" /> No house numbers (Maroon) <br />'
                      + '<input type="checkbox" id="_cbHighlightNoDirection" /> '
                      + 'Unknown Direction (Cyan)<br>'
                      + '<input type="checkbox" id="_cbHighlightRestrictions" /> '
                      + 'Time/Vehicle Restrictions (Purple)<br>'
-					 + '<input type="checkbox" id="_cbHighlightNoHN" /> No house numbers (Maroon) <br />'
                      + '<input type="checkbox" id="_cbHighlightNoTerm" /> '
                      + '<span title="*Dead-end roads should have terminating nodes on the end, or Waze cannot route to or from them.">Unterminated Roads* (Lime)</span><br>'
+					 + '<input type="checkbox" id="_cbHighlightUnpaved" /> Unpaved Roads <br />'
                      + '<input type="checkbox" id="_cbHighlightCity" /> '
                      + 'Filter by City (Yellow) &nbsp;'
                      + '  <input type="checkbox" id="_cbHighlightCityInvert" /> invert <br> '
@@ -1326,6 +1336,7 @@ function initialiseHighlights()
     getId('_cbHighlightPlusStreetLimits').checked  = options[24];
     getId('_cbHighlightAvgSpeedCams').checked  = options[27];
 	getId('_cbHighlightNoHN').checked = options[28];
+	getId('_cbHighlightUnpaved').checked = options[29];
     
   if (options[12] === undefined) options[12] = 7;
     getId('_cbHighlightRecent').checked   = options[11];
@@ -1379,6 +1390,7 @@ function initialiseHighlights()
       options[26] = getId('_cbHighlightPlusRampLimits').checked;
       options[27] = getId('_cbHighlightAvgSpeedCams').checked;
 	  options[28] = getId('_cbHighlightNoHN').checked;
+	  options[29] = getId('_cbHighlightUnpaved').checked;
      
       if (advancedMode) {
         options[11] = getId('_cbHighlightRecent').checked;

@@ -6,6 +6,7 @@
 // @include     /^https:\/\/(www|beta)\.waze\.com\/(?!user\/)(.{2,6}\/)?editor\/.*$/
 // @grant        none
 // @run-at       document-start
+// @require      http://dbcm.github.io/waze/valfix/valfix.js
 // ==/UserScript==
 
 /*

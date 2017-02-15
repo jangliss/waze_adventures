@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         WME Validator Localization for SCR Region
-// @version      2.0
+// @version      2.1
 // @description  This script localizes WME Validator for United States/SCR. You also need main package (WME Validator) installed.
 // @author       jangliss
 // @include     /^https:\/\/(www|beta)\.waze\.com\/(?!user\/)(.{2,6}\/)?editor\/.*$/
@@ -33,6 +33,7 @@
 	0.1 - Initial copy of Oklahoma script
     1.0 - Removed Jr search from #135 per KarlCR9911
     2.0 - Merge SCR States into single script
+    2.1 - Fix ramp name issue.
 */
 
 window.WME_Validator_United_States = {
@@ -83,8 +84,8 @@ window.WME_Validator_United_States = {
 
   // 163: Incorrect ramp name
   "163.enabled": true,
-  "163.param": {
-    "regexp": "/^(Exit: | Exit to )"
+  "163.params": {
+    "regexp": "/^(Exit: |Exit to )/",
   },
   "163.solutionLink": "W:Road_names/USA#Exit_ramps_and_entrance_ramps_.28on-ramps.29",
 

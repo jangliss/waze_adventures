@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         WME Validator Localization for SCR Region
-// @version      2.1
+// @version      2.2
 // @description  This script localizes WME Validator for United States/SCR. You also need main package (WME Validator) installed.
 // @author       jangliss
 // @include     /^https:\/\/(www|beta)\.waze\.com\/(?!user\/)(.{2,6}\/)?editor\/.*$/
@@ -34,6 +34,7 @@
     1.0 - Removed Jr search from #135 per KarlCR9911
     2.0 - Merge SCR States into single script
     2.1 - Fix ramp name issue.
+	2.2 - Fix for spaces between CR and ###
 */
 
 window.WME_Validator_United_States = {
@@ -134,7 +135,7 @@ window.WME_Validator_United_States = {
 	"problemEN": "TX & OK uses CR for county road, SH for state highway, US for national highway, and I for interstate names",
 	"solutionEN": "Rename the Street or Alt Street",
 	"template": "${state}:${street}#${altStreet[#]}",
-    "regexp": "/^(Oklahoma|Texas):.*(?!(SH|CR|US|I)-[0-9]+ ?[A-Za-z]*)([Ii](- | -|-|=| =|= )?|[Uu]\.?[Ss]\.?( [Hh](WY|wy|ighway)| Rte| -|- |-|=| =|= )?|([Oo][Kk]|[Tt][Xx]|[Ss]tate|[Cc](ounty|[Oo])) ?([Hh](WY|wy|ighway)|[Rr][Dd]|Rte)|(([Oo][Kk]|[Tt][Xx]|([Ss]|[Cc])([Hh]|[Rr]))(- | -|-|=| =|= ))) ?[0-9]+ ?[A-Za-z]*/"
+    "regexp": "/^(Oklahoma|Texas):.*(?!(SH|CR|US|I)-[0-9]+ ?[A-Za-z]*)([Ii](- | -|-|=| =|= | )?|[Uu]\.?[Ss]\.?( [Hh](WY|wy|ighway)| Rte| -|- |-|=| =|= | )?|([Oo][Kk]|[Tt][Xx]|[Ss]tate|[Cc](ounty|[Oo])) ?([Hh](WY|wy|ighway)|[Rr][Dd]|Rte)|(([Oo][Kk]|[Tt][Xx]|([Ss]|[Cc])([Hh]|[Rr]))(- | -|-|=| =|= | ))) ?[0-9]+ ?[A-Za-z]*/"
   },
 
   "133.solutionLink": "W:Road_types/USA#Quick_reference_chart",

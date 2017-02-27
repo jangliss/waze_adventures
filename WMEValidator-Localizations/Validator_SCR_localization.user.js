@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         WME Validator Localization for SCR Region
-// @version      2.2
+// @version      2.3
 // @description  This script localizes WME Validator for United States/SCR. You also need main package (WME Validator) installed.
 // @author       jangliss
 // @include     /^https:\/\/(www|beta)\.waze\.com\/(?!user\/)(.{2,6}\/)?editor\/.*$/
@@ -34,7 +34,9 @@
     1.0 - Removed Jr search from #135 per KarlCR9911
     2.0 - Merge SCR States into single script
     2.1 - Fix ramp name issue.
-	2.2 - Fix for spaces between CR and ###
+    2.2 - Fix for spaces between CR and ###
+    2.3 - Change Interstate rule to only match certain suffixes, and allow upper/lower level (thanks @sketch).
+        - Added mapping to ignore Interstate Service Road (LA)
 */
 
 window.WME_Validator_United_States = {
@@ -144,7 +146,7 @@ window.WME_Validator_United_States = {
     "problemEN": "All non-BUS/SPUR/LOOP Interstates should be Freeway. All BUS/SPUR/LOOP Interstates and non-BUS/SPUR/LOOP US Highways should be at least Major Highway. All BUS/SPUR/LOOP US Highways and non-BUS/SPUR/LOOP State Highways should be at least Minor Highway. All BUS/SPUR/LOOP State Highways should be at least Primary Street.",
     "solutionEN": "Change the road type to Freeway or Major Highway",
     "template": "${typeRank}:#${street}@#${altStreet[@#]}@",
-    "regexp": "/^(1[^25]?:#I-[0-9]+[A-Za-z]? ?(?:(?!SPUR|LOOP|BUS).)*)@|^[1-9][^245]?:#.*(I-[0-9]+[A-Za-z]* ?(SPUR|BUS|LOOP).*@)|^[1-9][^245]?:#.*(US-[0-9]+(?:(?!SPUR|LOOP|BUS).)*)@|^[1-9][^2-5]:.*#(SH-[0-9]+(?:(?!SPUR|LOOP|BUS).)*)@|^[1-9][^2-5]:.*#(US-)[0-9]+( BUS| LOOP| SPUR)+( [NSWE])?.*@|^[1-9][^1-5]:.*#(SH-)[0-9]+( BUS| LOOP| SPUR)+( [NSWE])?.*@/i"
+    "regexp": "/^(1[^25]?:#I-[0-9]+[WEC]?( (EXPRESS|LOCAL|(Upper|Lower) Level))?(?: [NSEW])?)@|^[1-9][^1-5]:.*#I-[0-9]+[WEC]? Service Rd( [NSWE])?.*@|^[1-9][^245]?:#.*(I-[0-9]+[A-Za-z]* ?(SPUR|BUS|LOOP).*@)|^[1-9][^245]?:#.*(US-[0-9]+(?:(?!SPUR|LOOP|BUS).)*)@|^[1-9][^2-5]:.*#(SH-[0-9]+(?:(?!SPUR|LOOP|BUS).)*)@|^[1-9][^2-5]:.*#(US-)[0-9]+( BUS| LOOP| SPUR)+( [NSWE])?.*@|^[1-9][^1-5]:.*#(SH-)[0-9]+( BUS| LOOP| SPUR)+( [NSWE])?.*@/i",
   },
   "133.enabled": true,
 

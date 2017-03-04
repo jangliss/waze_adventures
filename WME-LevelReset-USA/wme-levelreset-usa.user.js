@@ -109,7 +109,7 @@ function LevelReset_init() {
         saveLockLevelsBox = document.createElement('input'),
         saveLockLevelsBoxLabel = document.createElement('label'),
         percentageLoader = document.createElement('div'),
-        readable = {'str':'Streets (L1)', 'pri':'Primary Streets','min':'Minor Highways', 'maj':'Major Highways',  'rmp':'Ramps', 'fwy':'Freeways'};
+        readable = {'str':'Streets (L1)', 'pri':'Primary Streets','min':'Minor Highways', 'maj':'Major Highways',  'rmp':'Ramps', 'fwy':'Freeways', 'priv':'Private Streets', 'rr':'Railroad'};
 
     // Begin building
     relockContent.id = 'sidepanel-relockTab';
@@ -208,13 +208,13 @@ function LevelReset_init() {
     rrLvlSet.style.cssText = 'width: 28px';
     rrLvlSet.onchange = function() { saveLockLevels(); };
     rrLvlSetLabel.htmlFor = 'priLvlSet';
-    rrLvlSetLabel.innerHTML = 'PS:';
+    rrLvlSetLabel.innerHTML = 'PR:';
     rrLvlSetLabel.style.cssText = 'font-size:90%';
 
     privLvlSet.type = 'number';
     privLvlSet.min = '1';
     privLvlSet.max = '6';
-    privLvlSet.title = 'PS';
+    privLvlSet.title = 'PR';
     privLvlSet.id = 'privLvlSet';
     if (localStorage.LevelResetUSAsaveLocks == 1) {
         privLvlSet.value = localStorage.LevelResetUSAprivLvl;

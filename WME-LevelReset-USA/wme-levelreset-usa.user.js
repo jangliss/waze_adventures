@@ -1,11 +1,11 @@
 // ==UserScript==
 // @name         WME LevelReset - USA
 // @namespace    https://greasyfork.org/users/23100
-// @version      0.2.5
+// @version      0.2.6
 // @description  Script version of the WME LevelReset tool, to make relocking segments to their appropriate lock level easy & quick.
-// @author       Broos Gert '2015 / Blaine Kahle
-// @include         https://*.waze.com/*editor/*
-// @exclude         https://www.waze.com/*user/editor/*
+// @author       Broos Gert '2015 / Blaine Kahle / Jonathan Angliss
+// @include      https://*.waze.com/*editor/*
+// @exclude      https://www.waze.com/*user/editor/*
 // @grant        none
 // @icon		 data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAA+VBMVEX///93PgHX19fTgQfFZgLLcwTrxYDDgA3nqBj5+fmwr6+Yl5f8/PzExMTl5eX114vv7+/e3t68vLzOzs6saRKARQSLTgeioqK2tbX72XfU1NT515fxz4b54b3RmySYWAv31aTpwIHgrn9/f3/75qPZsEvuuC/utx3psVP13KizbhXuuVj745bfoEzzwzDxwDXTjknpxqDPfhzWih7PhUaObErowqDJchrmqCfprRjbmUvblCLZjAv71WnhnyTfmA7hrmbjsm7qxpPv06vYljj305776MvLkD3XkjFwcHCMi4v6zk/6z1P2wVDYqzr3y3j2xWnrrl761X3u0VhGAAABv0lEQVQ4jZWTXXuaMBiGY7bZQUhIoBaKsIK0KkVqtd+2tJ2gnVJs9f//mAW78uHYwe6TXE+em/flJAD8D0RVdF3HTKqvGcaMAiAQVYd1vaEASikhhFKA1ZoeA8Iwct2lCAnAxl/zdcAMbeGipbtwMQM62xFEFUJtoWEIsbh0CVTF3QGqqrjax2cq4kkkFQFjTJD2eYeXBoa4uoEoBOU/RhBUWHWHJukUCZ9JQFCnWkVAQJRQniREyvGPANA/YzazRhBKwjSOg+DZmdoRZ+r8XAfxr5eo1AfzuW1HljXfYkX2zJ5b8TQXXtbWzPff38x2hvn27qf+zFrHubC39tppGoabjczZHIZpmra9/jgXTn2vnSTJaxgecsLwNRkmsueflgV5eLZarU4y+Lk6G9YIg8HxB4PBYEfY3woZQ0529rjQ3y+Evid3ez9K9LpmWTjqe2b3Ti5xlwlHhRDYzdvvFW5NOyiEAy48Pu2VeHps2sFBIUwi5/6hWeLh3okmhdCajJyLLxUunNGktS0lgdLW+agz/lZh3Bmdt6ggZS/NUBqX152brxVuOteXDZVRafsUrxq1XGHIBb6CwHoY4Tt+A1eiQ8S/AAv7AAAAAElFTkSuQmCC
 // @require      https://greasyfork.org/scripts/24851-wazewrap/code/WazeWrap.js?version=157879
@@ -20,10 +20,10 @@ function LevelReset_bootstrap() {
 
 function LevelReset_init() {
     // versioning
-    var LevelResetUSAversion = '0.2.5';
+    var LevelResetUSAversion = '0.2.6';
     var LRUSAchanges = 'LevelReset - USA has been updated to version ' + LevelResetUSAversion + '\n';
     LRUSAchanges += 'Changes:\n';
-    LRUSAchanges += '[*] Update for compatibility with the new WME\n';
+    LRUSAchanges += '[*] Added support for RR and PRs\n';
 
     if (window.localStorage &&
 		    ('undefined' === window.localStorage.LevelResetUSAversion ||
@@ -56,12 +56,14 @@ function LevelReset_init() {
         userlevel = Waze.loginManager.user.normalizedLevel,
         //userlevel = 6, // for testing purposes (this does not enable you to lock higher!)
 	locklevels = {
-		'str' : 0,
-		'pri' : 1,
-		'min' : 2,
-		'maj' : 3,
-		'rmp' : 4,
-		'fwy' : 4,
+		'str'  : 0,
+		'pri'  : 1,
+        'rr'   : 1,
+        'priv' : 1,
+		'min'  : 2,
+		'maj'  : 3,
+		'rmp'  : 4,
+		'fwy'  : 4,
 	};
         absolute = false,
         fwy_cnt = 0,
@@ -70,6 +72,8 @@ function LevelReset_init() {
         min_cnt = 0,
         pri_cnt = 0,
         str_cnt = 0,
+        rr_cnt = 0,
+        priv_cnt = 0,
         relockObject = null,
         relockTab = document.createElement('li'),
         userInfo = document.getElementById('user-info'),
@@ -82,6 +86,10 @@ function LevelReset_init() {
         lvlSetTitle = document.createElement('h4'),
         priLvlSet = document.createElement('input'),
         priLvlSetLabel = document.createElement('label'),
+        rrLvlSet = document.createElement('input'),
+        rrLvlSetLabel = document.createElement('label'),
+        privLvlSet = document.createElement('input'),
+        privLvlSetLabel = document.createElement('label'),
         minLvlSet = document.createElement('input'),
         minLvlSetLabel = document.createElement('label'),
         majLvlSet = document.createElement('input'),
@@ -186,6 +194,40 @@ function LevelReset_init() {
     priLvlSetLabel.innerHTML = 'PS:';
     priLvlSetLabel.style.cssText = 'font-size:90%';
 
+    rrLvlSet.type = 'number';
+    rrLvlSet.min = '1';
+    rrLvlSet.max = '6';
+    rrLvlSet.title = 'RR';
+    rrLvlSet.id = 'rrLvlSet';
+    if (localStorage.LevelResetUSAsaveLocks == 1) {
+        rrLvlSet.value = localStorage.LevelResetUSArrLvl;
+    } else {
+        rrLvlSet.value = locklevels.rr + 1; // internal values are indexed at zero
+    }
+    rrLvlSet.className = "lvlSetStyle";
+    rrLvlSet.style.cssText = 'width: 28px';
+    rrLvlSet.onchange = function() { saveLockLevels(); };
+    rrLvlSetLabel.htmlFor = 'priLvlSet';
+    rrLvlSetLabel.innerHTML = 'PS:';
+    rrLvlSetLabel.style.cssText = 'font-size:90%';
+
+    privLvlSet.type = 'number';
+    privLvlSet.min = '1';
+    privLvlSet.max = '6';
+    privLvlSet.title = 'PS';
+    privLvlSet.id = 'privLvlSet';
+    if (localStorage.LevelResetUSAsaveLocks == 1) {
+        privLvlSet.value = localStorage.LevelResetUSAprivLvl;
+    } else {
+        privLvlSet.value = locklevels.priv + 1; // internal values are indexed at zero
+    }
+    privLvlSet.className = "lvlSetStyle";
+    privLvlSet.style.cssText = 'width: 28px';
+    privLvlSet.onchange = function() { saveLockLevels(); };
+    privLvlSetLabel.htmlFor = 'privLvlSet';
+    privLvlSetLabel.innerHTML = 'PR:';
+    privLvlSetLabel.style.cssText = 'font-size:90%';
+
     minLvlSet.type = 'number';
     minLvlSet.min = '1';
     minLvlSet.max = '6';
@@ -278,6 +320,8 @@ function LevelReset_init() {
     relockContent.appendChild(document.createElement('div'));
     relockContent.appendChild(priLvlSetLabel);
     relockContent.appendChild(priLvlSet);
+    relockContent.appendChild(privLvlSetLabel);
+    relockContent.appendChild(privLvlSet);
     relockContent.appendChild(minLvlSetLabel);
     relockContent.appendChild(minLvlSet);
     relockContent.appendChild(majLvlSetLabel);
@@ -286,6 +330,8 @@ function LevelReset_init() {
     relockContent.appendChild(rmpLvlSet);
     relockContent.appendChild(fwyLvlSetLabel);
     relockContent.appendChild(fwyLvlSet);
+    relockContent.appendChild(rrLvlSetLabel);
+    relockContent.appendChild(rrLvlSet);
     relockContent.appendChild(relockSubTitle);
     relockContent.appendChild(resultsCntr);
     relockContent.appendChild(relockAllbutton);
@@ -361,6 +407,8 @@ function LevelReset_init() {
             localStorage.LevelResetUSAmajLvl = majLvlSet.value;
             localStorage.LevelResetUSArmpLvl = rmpLvlSet.value;
             localStorage.LevelResetUSAfwyLvl = fwyLvlSet.value;
+            localStorage.LevelResetUSAprivLvl = privLvlSet.value;
+            localStorage.LevelResetUSArrLvl = rrLvlSet.value;
         }
     }
 
@@ -369,6 +417,8 @@ function LevelReset_init() {
 	locklevels = {
 		'str' : 0,
 		'pri' : priLvlSet.value - 1,
+        'priv': privLvlSet.value - 1,
+        'rr'  : rrLvlSet.value - 1,
 		'min' : minLvlSet.value - 1,
 		'maj' : majLvlSet.value - 1,
 		'rmp' : rmpLvlSet.value - 1,
@@ -376,7 +426,7 @@ function LevelReset_init() {
 	};
 
         // Object with array of roadtypes, to collect each wrongly locked segment, for later use
-        relockObject = {'str':[], 'pri':[], 'min':[], 'maj':[], 'rmp':[], 'fwy':[]};
+        relockObject = {'str':[], 'pri':[], 'min':[], 'maj':[], 'rmp':[], 'fwy':[], 'rr':[], 'priv':[]};
         var foundBadlocks = false;
         var count = 0;
 
@@ -403,6 +453,32 @@ function LevelReset_init() {
                     }
                     if (v.attributes.lockRank > locklevels.pri && includeAllSegments.checked) {
                         relockObject.pri.push(new UpdateObject(v, {lockRank: locklevels.pri}));
+                        foundBadlocks = true;
+                        count++;
+                    }
+                }
+                // Private (L2)
+                if (v.attributes.roadType == 17 && (userlevel >= (locklevels.priv + 1)) ) {
+                    if (v.attributes.lockRank < locklevels.priv) {
+                        relockObject.priv.push(new UpdateObject(v, {lockRank: locklevels.priv}));
+                        foundBadlocks = true;
+                        count++;
+                    }
+                    if (v.attributes.lockRank > locklevels.priv && includeAllSegments.checked) {
+                        relockObject.priv.push(new UpdateObject(v, {lockRank: locklevels.priv}));
+                        foundBadlocks = true;
+                        count++;
+                    }
+                }
+                // Rail Road (L2)
+                if (v.attributes.roadType == 18 && (userlevel >= (locklevels.rr + 1)) ) {
+                    if (v.attributes.lockRank < locklevels.rr) {
+                        relockObject.rr.push(new UpdateObject(v, {lockRank: locklevels.rr}));
+                        foundBadlocks = true;
+                        count++;
+                    }
+                    if (v.attributes.lockRank > locklevels.rr && includeAllSegments.checked) {
+                        relockObject.rr.push(new UpdateObject(v, {lockRank: locklevels.rr}));
                         foundBadlocks = true;
                         count++;
                     }

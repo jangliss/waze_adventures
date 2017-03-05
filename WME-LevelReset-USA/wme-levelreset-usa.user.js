@@ -208,7 +208,7 @@ function LevelReset_init() {
     rrLvlSet.style.cssText = 'width: 28px';
     rrLvlSet.onchange = function() { saveLockLevels(); };
     rrLvlSetLabel.htmlFor = 'priLvlSet';
-    rrLvlSetLabel.innerHTML = 'PR:';
+    rrLvlSetLabel.innerHTML = 'RR:';
     rrLvlSetLabel.style.cssText = 'font-size:90%';
 
     privLvlSet.type = 'number';

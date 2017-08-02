@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         WME LevelReset - USA
 // @namespace    https://greasyfork.org/users/23100
-// @version      0.2.6
+// @version      0.2.7
 // @description  Script version of the WME LevelReset tool, to make relocking segments to their appropriate lock level easy & quick.
 // @author       Broos Gert '2015 / Blaine Kahle / Jonathan Angliss
 // @include      https://*.waze.com/*editor/*
@@ -20,10 +20,10 @@ function LevelReset_bootstrap() {
 
 function LevelReset_init() {
     // versioning
-    var LevelResetUSAversion = '0.2.6';
+    var LevelResetUSAversion = '0.2.7';
     var LRUSAchanges = 'LevelReset - USA has been updated to version ' + LevelResetUSAversion + '\n';
     LRUSAchanges += 'Changes:\n';
-    LRUSAchanges += '[*] Added support for RR and PRs\n';
+    LRUSAchanges += '[*] Updated to new WazeWrap library.\n';
 
     if (window.localStorage &&
 		    ('undefined' === window.localStorage.LevelResetUSAversion ||

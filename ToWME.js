@@ -24,6 +24,6 @@ javascript: (function() {
 		mOut = 'https://www.waze.com/editor/?env=usa&lon=' + mapCenter.longitude + '&lat=' + mapCenter.latitude + '&zoom=' + mZoom;
 	}
     if (mOut !== null) {
-        window.open(mOut, 'WME');
+        window.open(mOut);
     }
 })();

@@ -18,7 +18,7 @@ javascript: (function() {
             mOut = 'https://www.waze.com/editor/?env=usa&lon=' + mRes[3] + '&lat=' + mRes[2] + '&zoom=' + mZoom + '&mode=0';
         }
     } else if (~mURL.toLowerCase().indexOf("waze.com")) {
-        var mReg = /\/editor\/\?env=usa&lon=(-?\d+\.?\d+)&lat=(-?\d+\.?\d+)&zoom=(\d{1,2})&segments=/i;         
+        var mReg = /&lon=(-?\d+\.?\d+)&lat=(-?\d+\.?\d+)&/i;         
         var mRes = mReg.exec(mURL);         
         mOut = 'https://drivetexas.org/#/15/' + mRes[2] + '/' + mRes[1] ;           
     } else if (~mURL.toLowerCase().indexOf("i35-maps.tti.tamu.edu")) {

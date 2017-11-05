@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         WME Quick HN
 // @description  Quick House Numbers
-// @version      0.8
+// @version      0.9
 // @author       Vinkoy
 // @include      /^https:\/\/(www|beta)\.waze\.com\/(?!user\/)(.{2,6}\/)?editor\/.*$/
 // @namespace    https://greasyfork.org/en/scripts/21378-wme-quick-hn
@@ -71,18 +71,18 @@ function initialiseQuickHN()
         });
     });
     editPanelChange.observe(document.getElementById('edit-panel'), { childList: true, subtree: true });
-    
+
     var hnWindowShow = new MutationObserver(function(mutations)
     {
         mutations.forEach(function(mutation)
         {
-            if (mutation.target.style.display == 'block') {
+            if (mutation.type == 'childList') {
                 $('.sidebar-layout > .overlay').remove();
             }
         });
     });
-    hnWindowShow.observe(document.getElementById('map-lightbox'), { childList: false, subtree: false, attributes: true, attributeFilter: ['style']} );
-    
+    hnWindowShow.observe(document.getElementById('map-lightbox'), { childList: true, subtree: true } );
+
     I18n.translations[I18n.locale].keyboard_shortcuts.groups['default'].members.WME_QHN_newHN = "New HN (+1)";
     Waze.accelerators.addAction("WME_QHN_newHN", {group: 'default'});
     Waze.accelerators.events.register("WME_QHN_newHN", null, addHN);
@@ -217,8 +217,8 @@ function addHN3()
 
 function setFocus()
 {
-    $('#map-lightbox .add').click();
-    $('#map-lightbox .add').click();
+    $('#toolbar .add-house-number').click();
+    $('#toolbar .add-house-number').click();
     var hn = getElementsByClassName("number");
     for (i=0; i<hn.length; i++)
     {

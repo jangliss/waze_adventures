@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         WMEFixer
 // @namespace    http://tampermonkey.net/
-// @version      0.0.2
+// @version      0.0.3
 // @description  try to take over the world!
 // @author       jangliss (h/t to dummyd2)
 // @match        https://*.waze.com/*editor/*
@@ -10,6 +10,11 @@
 // @grant        none
 // ==/UserScript==
 
+/*
+  ChangeLog
+  =========
+  0.0.3 - Updated script to look for assets in new location, courtesy of willdanneriv
+*/
 (function() {
 // setup one global var and put all in
 var WMEAPI = {};
@@ -20,7 +25,7 @@ WMEAPI.scripts = document.getElementsByTagName('script');
 WMEAPI.url=null;
 for (i=0;i<WMEAPI.scripts.length;i++)
 {
-    if (WMEAPI.scripts[i].src.indexOf('/assets-editor/js/app')!=-1)
+    if (WMEAPI.scripts[i].src.indexOf('/editor-assets.waze.com/production/js/app')!=-1)
     {
         WMEAPI.url=WMEAPI.scripts[i].src;
         break;

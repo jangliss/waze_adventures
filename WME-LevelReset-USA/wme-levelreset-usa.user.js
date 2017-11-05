@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         WME LevelReset - USA
 // @namespace    https://greasyfork.org/users/23100
-// @version      0.2.6
+// @version      0.2.7
 // @description  Script version of the WME LevelReset tool, to make relocking segments to their appropriate lock level easy & quick.
 // @author       Broos Gert '2015 / Blaine Kahle / Jonathan Angliss
 // @include      https://*.waze.com/*editor/*
@@ -20,10 +20,10 @@ function LevelReset_bootstrap() {
 
 function LevelReset_init() {
     // versioning
-    var LevelResetUSAversion = '0.2.6';
+    var LevelResetUSAversion = '0.2.7';
     var LRUSAchanges = 'LevelReset - USA has been updated to version ' + LevelResetUSAversion + '\n';
     LRUSAchanges += 'Changes:\n';
-    LRUSAchanges += '[*] Added support for RR and PRs\n';
+    LRUSAchanges += '[*] Added support for PS being locked +1 when one-way\n';
 
     if (window.localStorage &&
 		    ('undefined' === window.localStorage.LevelResetUSAversion ||
@@ -104,8 +104,22 @@ function LevelReset_init() {
         alertCntr = document.createElement('div'),
         hidebutton = document.createElement('div'),
         dotscntr = document.createElement('div'),
+        includeAllSegments_divParent = document.createElement('div'),
+        includeAllSegments_divLeft = document.createElement('div'),
+        includeAllSegments_divRight = document.createElement('div'),
+        includeAllSegments_divClear = document.createElement('div'),
         includeAllSegments = document.createElement('input'),
         includeAllSegmentsLabel = document.createElement('label'),
+        plusOnePSOneWay_divParent = document.createElement('div'),
+        plusOnePSOneWay_divLeft = document.createElement('div'),
+        plusOnePSOneWay_divRight = document.createElement('div'),
+        plusOnePSOneWay_divClear = document.createElement('div'),
+        plusOnePSOneWay = document.createElement('input'),
+        plusOnePSOneWayLabel = document.createElement('label'),
+        saveLockLevelsBox_divParent = document.createElement('div'),
+        saveLockLevelsBox_divLeft = document.createElement('div'),
+        saveLockLevelsBox_divRight = document.createElement('div'),
+        saveLockLevelsBox_divClear = document.createElement('div'),
         saveLockLevelsBox = document.createElement('input'),
         saveLockLevelsBoxLabel = document.createElement('label'),
         percentageLoader = document.createElement('div'),
@@ -150,7 +164,37 @@ function LevelReset_init() {
     };
     includeAllSegmentsLabel.htmlFor = "_allSegments";
     includeAllSegmentsLabel.innerHTML = 'Also reset higher locked segments';
-    includeAllSegmentsLabel.style.cssText = 'font-size:95%;margin-left:5px;vertical-align:middle';
+    includeAllSegmentsLabel.style.cssText = 'font-size:95%;vertical-align:middle';
+
+    includeAllSegments_divLeft.style.cssText = 'float:left';
+    includeAllSegments_divLeft.appendChild(includeAllSegmentsLabel);
+    includeAllSegments_divRight.style.cssText = 'float:right';
+    includeAllSegments_divRight.appendChild(includeAllSegments);
+    includeAllSegments_divClear.style.cssText = 'clear:both';
+    includeAllSegments_divParent.appendChild(includeAllSegments_divLeft);
+    includeAllSegments_divParent.appendChild(includeAllSegments_divRight);
+    includeAllSegments_divParent.appendChild(includeAllSegments_divClear);
+
+    // Lock PS +1 when one-way?
+    plusOnePSOneWay.type = 'checkbox';
+    plusOnePSOneWay.name = "name";
+    plusOnePSOneWay.value = "value";
+    plusOnePSOneWay.id = "_plusOnePSOneWay";
+    plusOnePSOneWay.onclick = function() {
+        scanArea();
+        relockShowAlert();
+    };
+    plusOnePSOneWayLabel.htmlFor = "_plusOnePSOneWay";
+    plusOnePSOneWayLabel.innerHTML = 'Lock PS +1 when one-way';
+    plusOnePSOneWayLabel.style.cssText = 'font-size:95%;vertical-align:middle';
+    plusOnePSOneWay_divLeft.style.cssText = 'float:left';
+    plusOnePSOneWay_divLeft.appendChild(plusOnePSOneWayLabel);
+    plusOnePSOneWay_divRight.style.cssText = 'float:right';
+    plusOnePSOneWay_divRight.appendChild(plusOnePSOneWay);
+    plusOnePSOneWay_divClear.style.cssText = 'clear:both';
+    plusOnePSOneWay_divParent.appendChild(plusOnePSOneWay_divLeft);
+    plusOnePSOneWay_divParent.appendChild(plusOnePSOneWay_divRight);
+    plusOnePSOneWay_divParent.appendChild(plusOnePSOneWay_divClear);
 
     // Save manually-set lock levels?
     saveLockLevelsBox.type = 'checkbox';
@@ -166,7 +210,16 @@ function LevelReset_init() {
     };
     saveLockLevelsBoxLabel.htmlFor = '_saveLockLevelsBox';
     saveLockLevelsBoxLabel.innerHTML = 'Save manual lock levels';
-    saveLockLevelsBoxLabel.style.cssText = 'font-size:95%;margin-left:5px;vertical-align:middle';
+    saveLockLevelsBoxLabel.style.cssText = 'font-size:95%;vertical-align:middle';
+
+    saveLockLevelsBox_divLeft.style.cssText = 'float:left';
+    saveLockLevelsBox_divLeft.appendChild(saveLockLevelsBoxLabel);
+    saveLockLevelsBox_divRight.style.cssText = 'float:right';
+    saveLockLevelsBox_divRight.appendChild(saveLockLevelsBox);
+    saveLockLevelsBox_divClear.style.cssText = 'clear:both';
+    saveLockLevelsBox_divParent.appendChild(saveLockLevelsBox_divLeft);
+    saveLockLevelsBox_divParent.appendChild(saveLockLevelsBox_divRight);
+    saveLockLevelsBox_divParent.appendChild(saveLockLevelsBox_divClear);
 
     // Alert box
     alertCntr.id = "alertCntr";
@@ -311,12 +364,11 @@ function LevelReset_init() {
         relockSub.appendChild(hidebutton);
         relockContent.appendChild(relockSub);
     }
-    relockContent.appendChild(includeAllSegments);
-    relockContent.appendChild(includeAllSegmentsLabel);
+    relockContent.appendChild(includeAllSegments_divParent);
+    relockContent.appendChild(plusOnePSOneWay_divParent);
     relockContent.appendChild(alertCntr);
+    relockContent.appendChild(saveLockLevelsBox_divParent);
     relockContent.appendChild(lvlSetTitle);
-    relockContent.appendChild(saveLockLevelsBox);
-    relockContent.appendChild(saveLockLevelsBoxLabel);
     relockContent.appendChild(document.createElement('div'));
     relockContent.appendChild(priLvlSetLabel);
     relockContent.appendChild(priLvlSet);
@@ -448,6 +500,11 @@ function LevelReset_init() {
                 if (v.attributes.roadType == 2 && (userlevel >= (locklevels.pri + 1)) ) {
                     if (v.attributes.lockRank < locklevels.pri) {
                         relockObject.pri.push(new UpdateObject(v, {lockRank: locklevels.pri}));
+                        foundBadlocks = true;
+                        count++;
+                    }
+                    if (plusOnePSOneWay.checked && (v.attributes.lockRank < (locklevels.pri+1)) && ((v.attributes.fwdDirection && !v.attributes.revDirection) || (!v.attributes.fwdDirection && v.attributes.revDirection))) {
+                        relockObject.pri.push(new UpdateObject(v, {lockRank: (locklevels.pri + 1)}));
                         foundBadlocks = true;
                         count++;
                     }

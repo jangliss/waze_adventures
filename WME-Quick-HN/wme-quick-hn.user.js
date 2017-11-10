@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         WME Quick HN
 // @description  Quick House Numbers
-// @version      0.9
+// @version      0.10
 // @author       Vinkoy
-// @include      /^https:\/\/(www|beta)\.waze\.com\/(?!user\/)(.{2,6}\/)?editor\/.*$/
+// @include      /^https:\/\/(www|beta)\.waze\.com\/(?!user\/)(.{2,6}\/)?editor.*$/
 // @namespace    https://greasyfork.org/en/scripts/21378-wme-quick-hn
 // @grant        none
 // ==/UserScript==

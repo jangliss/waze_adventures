@@ -14,12 +14,12 @@
 
 function quickHN_bootstrap()
 {
-    var oWaze=Waze;
+    var oWaze=W;
 	var oI18n=I18n;
 
 	if (typeof unsafeWindow !== "undefined")
 	{
-		oWaze=unsafeWindow.Waze;
+		oWaze=unsafeWindow.W;
 		oI18n=unsafeWindow.I18n;
 	}
 
@@ -49,7 +49,7 @@ function quickHN_bootstrap()
 		return;
 	}
 
-    Waze.selectionManager.events.register("selectionchanged", null, addTab);
+    oWaze.selectionManager.events.register("selectionchanged", null, addTab);
 
     setTimeout(initialiseQuickHN, 999);
 }
@@ -84,19 +84,19 @@ function initialiseQuickHN()
     hnWindowShow.observe(document.getElementById('map-lightbox'), { childList: true, subtree: true } );
 
     I18n.translations[I18n.locale].keyboard_shortcuts.groups['default'].members.WME_QHN_newHN = "New HN (+1)";
-    Waze.accelerators.addAction("WME_QHN_newHN", {group: 'default'});
-    Waze.accelerators.events.register("WME_QHN_newHN", null, addHN);
-    Waze.accelerators._registerShortcuts({ 't' : "WME_QHN_newHN"});
+    W.accelerators.addAction("WME_QHN_newHN", {group: 'default'});
+    W.accelerators.events.register("WME_QHN_newHN", null, addHN);
+    W.accelerators._registerShortcuts({ 't' : "WME_QHN_newHN"});
 
     I18n.translations[I18n.locale].keyboard_shortcuts.groups['default'].members.WME_QHN_newHN2 = "New HN (+2)";
-    Waze.accelerators.addAction("WME_QHN_newHN2", {group: 'default'});
-    Waze.accelerators.events.register("WME_QHN_newHN2", null, addHN2);
-    Waze.accelerators._registerShortcuts({ 'r' : "WME_QHN_newHN2"});
+    W.accelerators.addAction("WME_QHN_newHN2", {group: 'default'});
+    W.accelerators.events.register("WME_QHN_newHN2", null, addHN2);
+    W.accelerators._registerShortcuts({ 'r' : "WME_QHN_newHN2"});
 
     I18n.translations[I18n.locale].keyboard_shortcuts.groups['default'].members.WME_QHN_newHN3 = "New HN (+CUSTOM_VALUE)";
-    Waze.accelerators.addAction("WME_QHN_newHN3", {group: 'default'});
-    Waze.accelerators.events.register("WME_QHN_newHN3", null, addHN3);
-    Waze.accelerators._registerShortcuts({ 'e' : "WME_QHN_newHN3"});
+    W.accelerators.addAction("WME_QHN_newHN3", {group: 'default'});
+    W.accelerators.events.register("WME_QHN_newHN3", null, addHN3);
+    W.accelerators._registerShortcuts({ 'e' : "WME_QHN_newHN3"});
 }
 
 function localDataManager()
@@ -136,7 +136,7 @@ function localDataManager()
 
 function addTab()
 {
-    if(!document.getElementById("WME-Quick-HN") && Waze.selectionManager.selectedItems.length > 0 && Waze.selectionManager.selectedItems[0].model.type === 'segment')
+    if(!document.getElementById("WME-Quick-HN") && W.selectionManager.getSelectedFeatures().length > 0 && W.selectionManager.getSelectedFeatures()[0].model.type === 'segment')
     {
         var btnSection = document.createElement('div');
         btnSection.id = 'WME-Quick-HN';

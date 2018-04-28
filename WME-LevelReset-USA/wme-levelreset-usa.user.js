@@ -1,29 +1,28 @@
 // ==UserScript==
 // @name         WME LevelReset - USA
 // @namespace    https://greasyfork.org/users/23100
-// @version      0.2.7
+// @version      0.2.8
 // @description  Script version of the WME LevelReset tool, to make relocking segments to their appropriate lock level easy & quick.
 // @author       Broos Gert '2015 / Blaine Kahle / Jonathan Angliss
-// @include      https://*.waze.com/*editor/*
-// @exclude      https://www.waze.com/*user/editor/*
+// @include      /^https:\/\/(www|beta)\.waze\.com\/(?!user\/)(.{2,6}\/)?editor\/?.*$/
 // @grant        none
 // @icon		 data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAA+VBMVEX///93PgHX19fTgQfFZgLLcwTrxYDDgA3nqBj5+fmwr6+Yl5f8/PzExMTl5eX114vv7+/e3t68vLzOzs6saRKARQSLTgeioqK2tbX72XfU1NT515fxz4b54b3RmySYWAv31aTpwIHgrn9/f3/75qPZsEvuuC/utx3psVP13KizbhXuuVj745bfoEzzwzDxwDXTjknpxqDPfhzWih7PhUaObErowqDJchrmqCfprRjbmUvblCLZjAv71WnhnyTfmA7hrmbjsm7qxpPv06vYljj305776MvLkD3XkjFwcHCMi4v6zk/6z1P2wVDYqzr3y3j2xWnrrl761X3u0VhGAAABv0lEQVQ4jZWTXXuaMBiGY7bZQUhIoBaKsIK0KkVqtd+2tJ2gnVJs9f//mAW78uHYwe6TXE+em/flJAD8D0RVdF3HTKqvGcaMAiAQVYd1vaEASikhhFKA1ZoeA8Iwct2lCAnAxl/zdcAMbeGipbtwMQM62xFEFUJtoWEIsbh0CVTF3QGqqrjax2cq4kkkFQFjTJD2eYeXBoa4uoEoBOU/RhBUWHWHJukUCZ9JQFCnWkVAQJRQniREyvGPANA/YzazRhBKwjSOg+DZmdoRZ+r8XAfxr5eo1AfzuW1HljXfYkX2zJ5b8TQXXtbWzPff38x2hvn27qf+zFrHubC39tppGoabjczZHIZpmra9/jgXTn2vnSTJaxgecsLwNRkmsueflgV5eLZarU4y+Lk6G9YIg8HxB4PBYEfY3woZQ0529rjQ3y+Evid3ez9K9LpmWTjqe2b3Ti5xlwlHhRDYzdvvFW5NOyiEAy48Pu2VeHps2sFBIUwi5/6hWeLh3okmhdCajJyLLxUunNGktS0lgdLW+agz/lZh3Bmdt6ggZS/NUBqX152brxVuOteXDZVRafsUrxq1XGHIBb6CwHoY4Tt+A1eiQ8S/AAv7AAAAAElFTkSuQmCC
-// @require      https://greasyfork.org/scripts/24851-wazewrap/code/WazeWrap.js?version=206623
+// @require		 https://greasyfork.org/scripts/24851-wazewrap/code/WazeWrap.js?version=264605
 // ==/UserScript==
 
 // initialize LevelReset and do some checks
 function LevelReset_bootstrap() {
     LevelReset_init();
     // re-init when switching back from MTE mode
-    Waze.app.modeController.model.bind('change:mode', LevelReset_init);
+    W.app.modeController.model.bind('change:mode', LevelReset_init);
 }
 
 function LevelReset_init() {
     // versioning
-    var LevelResetUSAversion = '0.2.7';
+    var LevelResetUSAversion = '0.2.8';
     var LRUSAchanges = 'LevelReset - USA has been updated to version ' + LevelResetUSAversion + '\n';
     LRUSAchanges += 'Changes:\n';
-    LRUSAchanges += '[*] Added support for PS being locked +1 when one-way\n';
+    LRUSAchanges += '[*] Added changes for new WME updates.\n';
 
     if (window.localStorage &&
 		    ('undefined' === window.localStorage.LevelResetUSAversion ||
@@ -34,7 +33,7 @@ function LevelReset_init() {
     }
 
     // Check initialisation
-    if (typeof Waze == 'undefined' || typeof I18n == 'undefined') {
+    if (typeof W == 'undefined' || typeof I18n == 'undefined') {
         setTimeout(LevelReset_init, 660);
         console.log('LevelReset: Waze object unavailable, map still loading');
         return;
@@ -44,7 +43,7 @@ function LevelReset_init() {
 
     function onScreen(obj) {
         if (obj.geometry) {
-            return(Waze.map.getExtent().intersectsBounds(obj.geometry.getBounds()));
+            return(W.map.getExtent().intersectsBounds(obj.geometry.getBounds()));
         }
         return(false);
     }
@@ -53,7 +52,7 @@ function LevelReset_init() {
     var UpdateObject = require("Waze/Action/UpdateObject"),
         loader = 'data:image/gif;base64,R0lGODlhEAAQAPQAAP///wAAAPj4+Dg4OISEhAYGBiYmJtbW1qioqBYWFnZ2dmZmZuTk5JiYmMbGxkhISFZWVgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH+GkNyZWF0ZWQgd2l0aCBhamF4bG9hZC5pbmZvACH5BAAKAAAAIf8LTkVUU0NBUEUyLjADAQAAACwAAAAAEAAQAAAFUCAgjmRpnqUwFGwhKoRgqq2YFMaRGjWA8AbZiIBbjQQ8AmmFUJEQhQGJhaKOrCksgEla+KIkYvC6SJKQOISoNSYdeIk1ayA8ExTyeR3F749CACH5BAAKAAEALAAAAAAQABAAAAVoICCKR9KMaCoaxeCoqEAkRX3AwMHWxQIIjJSAZWgUEgzBwCBAEQpMwIDwY1FHgwJCtOW2UDWYIDyqNVVkUbYr6CK+o2eUMKgWrqKhj0FrEM8jQQALPFA3MAc8CQSAMA5ZBjgqDQmHIyEAIfkEAAoAAgAsAAAAABAAEAAABWAgII4j85Ao2hRIKgrEUBQJLaSHMe8zgQo6Q8sxS7RIhILhBkgumCTZsXkACBC+0cwF2GoLLoFXREDcDlkAojBICRaFLDCOQtQKjmsQSubtDFU/NXcDBHwkaw1cKQ8MiyEAIfkEAAoAAwAsAAAAABAAEAAABVIgII5kaZ6AIJQCMRTFQKiDQx4GrBfGa4uCnAEhQuRgPwCBtwK+kCNFgjh6QlFYgGO7baJ2CxIioSDpwqNggWCGDVVGphly3BkOpXDrKfNm/4AhACH5BAAKAAQALAAAAAAQABAAAAVgICCOZGmeqEAMRTEQwskYbV0Yx7kYSIzQhtgoBxCKBDQCIOcoLBimRiFhSABYU5gIgW01pLUBYkRItAYAqrlhYiwKjiWAcDMWY8QjsCf4DewiBzQ2N1AmKlgvgCiMjSQhACH5BAAKAAUALAAAAAAQABAAAAVfICCOZGmeqEgUxUAIpkA0AMKyxkEiSZEIsJqhYAg+boUFSTAkiBiNHks3sg1ILAfBiS10gyqCg0UaFBCkwy3RYKiIYMAC+RAxiQgYsJdAjw5DN2gILzEEZgVcKYuMJiEAOwAAAAAAAAAAAA==',
         strt = '',
-        userlevel = Waze.loginManager.user.normalizedLevel,
+        userlevel = W.loginManager.user.normalizedLevel,
         //userlevel = 6, // for testing purposes (this does not enable you to lock higher!)
 	locklevels = {
 		'str'  : 0,
@@ -397,7 +396,7 @@ function LevelReset_init() {
 
         // update GUI
         function RunLocal() {
-            Waze.model.actionManager.add(objects[_i]);
+            W.model.actionManager.add(objects[_i]);
             _i++;
 
             if (_i < objects.length) {
@@ -423,7 +422,7 @@ function LevelReset_init() {
                 // loop trough each segmentType
                 var _i = 0;
                 var RunLocal5 = function() {
-                    Waze.model.actionManager.add(value[_i]);
+                    W.model.actionManager.add(value[_i]);
                     _i++;
 
                     // Did not iterate with $.each, so the GUI can update with larger arrays
@@ -484,9 +483,9 @@ function LevelReset_init() {
 
         // Do a count on how many segments are in need of a correct lock (limit to 150 to save CPU)
         // Count also depends on the users editor level
-        $.each(Waze.model.segments.objects, function( k, v ) {
+        $.each(W.model.segments.objects, function( k, v ) {
             if (count < 150 && v.type == "segment" && onScreen(v) && v.isGeometryEditable()) {
-                strt = Waze.model.streets.get(v.attributes.primaryStreetID);
+                strt = W.model.streets.get(v.attributes.primaryStreetID);
 
                 // Street (L1)
                 if (v.attributes.roadType == 1) {
@@ -660,9 +659,9 @@ function LevelReset_init() {
     scanArea();
 
     // Register some eventlisteners
-    Waze.map.events.register("moveend", null, scanArea);
-    Waze.model.actionManager.events.register("afteraction", null, scanArea);
-    Waze.model.actionManager.events.register("afterundoaction", null, scanArea);
-    Waze.model.actionManager.events.register("noActions", null, scanArea);
+    W.map.events.register("moveend", null, scanArea);
+    W.model.actionManager.events.register("afteraction", null, scanArea);
+    W.model.actionManager.events.register("afterundoaction", null, scanArea);
+    W.model.actionManager.events.register("noActions", null, scanArea);
 }
 setTimeout(LevelReset_bootstrap, 2000);

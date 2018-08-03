@@ -1,13 +1,13 @@
 // ==UserScript==
 // @name         WME LevelReset - USA
 // @namespace    https://greasyfork.org/users/23100
-// @version      0.2.8
+// @version      0.2.9
 // @description  Script version of the WME LevelReset tool, to make relocking segments to their appropriate lock level easy & quick.
 // @author       Broos Gert '2015 / Blaine Kahle / Jonathan Angliss
 // @include      /^https:\/\/(www|beta)\.waze\.com\/(?!user\/)(.{2,6}\/)?editor\/?.*$/
 // @grant        none
 // @icon		 data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAA+VBMVEX///93PgHX19fTgQfFZgLLcwTrxYDDgA3nqBj5+fmwr6+Yl5f8/PzExMTl5eX114vv7+/e3t68vLzOzs6saRKARQSLTgeioqK2tbX72XfU1NT515fxz4b54b3RmySYWAv31aTpwIHgrn9/f3/75qPZsEvuuC/utx3psVP13KizbhXuuVj745bfoEzzwzDxwDXTjknpxqDPfhzWih7PhUaObErowqDJchrmqCfprRjbmUvblCLZjAv71WnhnyTfmA7hrmbjsm7qxpPv06vYljj305776MvLkD3XkjFwcHCMi4v6zk/6z1P2wVDYqzr3y3j2xWnrrl761X3u0VhGAAABv0lEQVQ4jZWTXXuaMBiGY7bZQUhIoBaKsIK0KkVqtd+2tJ2gnVJs9f//mAW78uHYwe6TXE+em/flJAD8D0RVdF3HTKqvGcaMAiAQVYd1vaEASikhhFKA1ZoeA8Iwct2lCAnAxl/zdcAMbeGipbtwMQM62xFEFUJtoWEIsbh0CVTF3QGqqrjax2cq4kkkFQFjTJD2eYeXBoa4uoEoBOU/RhBUWHWHJukUCZ9JQFCnWkVAQJRQniREyvGPANA/YzazRhBKwjSOg+DZmdoRZ+r8XAfxr5eo1AfzuW1HljXfYkX2zJ5b8TQXXtbWzPff38x2hvn27qf+zFrHubC39tppGoabjczZHIZpmra9/jgXTn2vnSTJaxgecsLwNRkmsueflgV5eLZarU4y+Lk6G9YIg8HxB4PBYEfY3woZQ0529rjQ3y+Evid3ez9K9LpmWTjqe2b3Ti5xlwlHhRDYzdvvFW5NOyiEAy48Pu2VeHps2sFBIUwi5/6hWeLh3okmhdCajJyLLxUunNGktS0lgdLW+agz/lZh3Bmdt6ggZS/NUBqX152brxVuOteXDZVRafsUrxq1XGHIBb6CwHoY4Tt+A1eiQ8S/AAv7AAAAAElFTkSuQmCC
-// @require		 https://greasyfork.org/scripts/24851-wazewrap/code/WazeWrap.js?version=264605
+// @require https://greasyfork.org/scripts/24851-wazewrap/code/WazeWrap.js?version=617039
 // ==/UserScript==
 
 // initialize LevelReset and do some checks
@@ -19,10 +19,11 @@ function LevelReset_bootstrap() {
 
 function LevelReset_init() {
     // versioning
-    var LevelResetUSAversion = '0.2.8';
+    var LevelResetUSAversion = GM_info.script.version;
     var LRUSAchanges = 'LevelReset - USA has been updated to version ' + LevelResetUSAversion + '\n';
     LRUSAchanges += 'Changes:\n';
     LRUSAchanges += '[*] Added changes for new WME updates.\n';
+    LRUSAchanges += '[*] Updated references to WazeWrap.\n';
 
     if (window.localStorage &&
 		    ('undefined' === window.localStorage.LevelResetUSAversion ||
@@ -485,7 +486,7 @@ function LevelReset_init() {
         // Count also depends on the users editor level
         $.each(W.model.segments.objects, function( k, v ) {
             if (count < 150 && v.type == "segment" && onScreen(v) && v.isGeometryEditable()) {
-                strt = W.model.streets.get(v.attributes.primaryStreetID);
+                strt = W.model.streets.getObjectById(v.attributes.primaryStreetID);
 
                 // Street (L1)
                 if (v.attributes.roadType == 1) {
